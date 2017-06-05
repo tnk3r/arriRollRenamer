@@ -3,12 +3,13 @@
 from PyQt4.QtGui import QMainWindow, QApplication, QFileDialog, QDialog, QPushButton, QLabel, QLineEdit
 from PyQt4.QtCore import QString
 import os, sys
+
 controller = QApplication(sys.argv)
 
 class window(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent=None)
-        self.files = str(QFileDialog.getExistingDirectory(self, "Select Directory containing Resolve DPX stills"))
+        self.files = str(QFileDialog.getExistingDirectory(self, "Select ARRIRAW Clip Directory"))
         self.Error = QString("")
         if self.files != "":
             self.showdialog("Set New Roll Number")
@@ -35,15 +36,18 @@ class window(QMainWindow):
         print self.newRoll
         os.chdir(self.files)
         for file in os.listdir(self.files):
+            ari = 0
             with open(str(file), "r+b") as f:
                 if str(f.read(4)) == "ARRI":
                     f.seek(1272)
-                    f.write(self.newRoll)
-                    f.seek(1688)
-                    f.write(self.newRoll)
+                    if os.path.basename(file)[0:4] == f.read(4):
+                        f.write(self.newRoll)
+                        f.seek(1688)
+                        f.write(self.newRoll)
                     f.close
-            os.system("mv "+str(file)+" "+str(self.newRoll)+str(file)[4:])
-        #os.system("mv "+str(self.files)+" "+str(os.path.dirname(self.files))+"/"+str(self.newRoll)+str(self.files.split("/")[-1])[4:])
+                    ari = 1
+            if ari == 1:
+                os.system("mv "+str(file)+" "+str(self.newRoll)+str(file)[4:])
         controller.quit()
 
 
