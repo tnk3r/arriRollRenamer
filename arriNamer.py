@@ -10,8 +10,8 @@ class window(QMainWindow):
         QMainWindow.__init__(self, parent=None)
         self.files = str(QFileDialog.getExistingDirectory(self, "Select Directory containing Resolve DPX stills"))
         self.Error = QString("")
-        self.showdialog("Set New Roll Number")
-        #self.process_frames()
+        if self.files != "":
+            self.showdialog("Set New Roll Number")
         sys.exit(0)
 
     def showdialog(self, title):
@@ -21,10 +21,12 @@ class window(QMainWindow):
         label.move(20, 20)
         self.current = os.listdir(self.files)[0][0:4]
         self.roll = QLineEdit(str(self.current), d)
+        self.roll.move(50, 20)
 
         b1 = QPushButton("Ok",d)
         b1.move(125,50)
         d.setWindowTitle(str(title))
+
         b1.clicked.connect(self.process_frames)
         d.exec_()
 
@@ -41,7 +43,7 @@ class window(QMainWindow):
                     f.write(self.newRoll)
                     f.close
             os.system("mv "+str(file)+" "+str(self.newRoll)+str(file)[4:])
-        os.system("mv "+str(self.files)+" "+str(os.path.dirname(self.files))+"/"+str(self.newRoll)+str(self.files.split("/")[-1])[4:])
+        #os.system("mv "+str(self.files)+" "+str(os.path.dirname(self.files))+"/"+str(self.newRoll)+str(self.files.split("/")[-1])[4:])
         controller.quit()
 
 
