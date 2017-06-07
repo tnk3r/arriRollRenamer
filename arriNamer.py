@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-from PyQt4.QtGui import QMainWindow, QApplication, QFileDialog, QDialog, QPushButton, QLabel, QLineEdit
-from PyQt4.QtCore import QString
+from PyQt5.QtGui import QMainWindow, QApplication, QFileDialog, QDialog, QPushButton, QLabel, QLineEdit
+from PyQt5.QtCore import QString
+
 import os, sys
 
 controller = QApplication(sys.argv)
